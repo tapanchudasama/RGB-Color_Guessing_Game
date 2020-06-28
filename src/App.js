@@ -13,7 +13,9 @@ class App extends React.Component {
       pickedcolor: "",
       mode: "hard",
       winStatus: false,
-      message: "",
+      message: "verdict",
+      score: 100,
+      tries: 0,
     };
   }
   componentDidMount() {
@@ -24,10 +26,17 @@ class App extends React.Component {
     });
   }
   handleWin = (pickedcolor) => {
+    var numberOfSquares;
+    if (this.state.mode === "easy") {
+      numberOfSquares = 3;
+    } else {
+      numberOfSquares = 6;
+    }
     this.setState({
-      colors: new Array(6).fill(pickedcolor),
+      colors: new Array(numberOfSquares).fill(pickedcolor),
       winStatus: true,
       message: "Correct!",
+      tries: 0,
     });
   };
 
@@ -38,7 +47,9 @@ class App extends React.Component {
       pickedcolor: pickColor(array),
       winStatus: false,
       mode: "hard",
-      message: "",
+      message: "verdict",
+      score: 100,
+      tries: 0,
     });
   };
   handleMode = (value) => {
@@ -53,13 +64,30 @@ class App extends React.Component {
       colors: array,
       pickedcolor: pickColor(array),
       winStatus: false,
-      message: "",
+      message: "verdict",
+      tries: 0,
+      score: 100,
     });
   };
   handleMessage = () => {
     this.setState({ message: "Try Again!" });
   };
-  displaySquares(pickedcolor, handleWin, handleMessage) {
+  handleTries = () => {
+    var numberOfSquares;
+    if (this.state.mode === "easy") {
+      numberOfSquares = 3;
+    } else {
+      numberOfSquares = 6;
+    }
+    this.setState({
+      tries: this.state.tries + 1,
+      score: Math.round(
+        this.state.score -
+          (this.state.tries / numberOfSquares) * this.state.score
+      ),
+    });
+  };
+  displaySquares(pickedcolor, handleWin, handleMessage, handleTries) {
     const squares = this.state.colors.map((squarecolor, i) => (
       <Square
         squarecolor={squarecolor}
@@ -67,6 +95,7 @@ class App extends React.Component {
         key={i}
         handleWin={handleWin}
         handleMessage={handleMessage}
+        handleTries={handleTries}
       />
     ));
     return squares;
@@ -83,12 +112,14 @@ class App extends React.Component {
           handleReset={this.handleReset}
           handleMode={this.handleMode}
           message={this.state.message}
+          score={this.state.score}
         />
         <div className="container">
           {this.displaySquares(
             this.state.pickedcolor,
             this.handleWin,
-            this.handleMessage
+            this.handleMessage,
+            this.handleTries
           )}
         </div>
       </div>

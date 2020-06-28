@@ -23,15 +23,16 @@ const Stripe = (props) => {
         New Colors
       </button>
       <span className="message">{props.message}</span>
+      <span className="message">Score: {props.score}</span>
       <button
-        className={easy === true ? "mode selected" : "mode"}
+        className={easy === true ? "selected" : ""}
         onClick={() => changeMode("easy")}
         value="easy"
       >
         Easy
       </button>
       <button
-        className={hard === true ? "mode selected" : "mode"}
+        className={hard === true ? "selected" : ""}
         value="hard"
         onClick={() => changeMode("hard")}
       >

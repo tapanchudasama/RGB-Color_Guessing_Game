@@ -9,6 +9,7 @@ const Square = (props) => {
   }, [props.squarecolor]);
 
   const checkWin = () => {
+    props.handleTries();
     if (props.squarecolor === props.pickedcolor) {
       props.handleWin(props.pickedcolor);
     } else {
